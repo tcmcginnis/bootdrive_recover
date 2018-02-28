@@ -24,6 +24,8 @@ echo "Root Volmume Group: $ROOTVG"
 grep -v "^#" /etc/fstab | egrep -e "^/dev/mapper/$ROOTVG\-" -e "^/dev/$ROOTVG" | grep -wv "swap" | awk '{print $2}' | sort | while read mp
 do
    echo "rsync -a --one-file-system --delete $mp/ $RECOVERYSOURCE$mp/"
+   rsync -a --one-file-system --delete $mp/ $RECOVERYSOURCE$mp/
 done
 
 echo "rsync -a --one-file-system --delete /boot $RECOVERYSOURCE/boot/"
+rsync -a --one-file-system --delete /boot $RECOVERYSOURCE/boot/

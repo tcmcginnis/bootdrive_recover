@@ -48,7 +48,7 @@ if [ "$BOOTMOUNTEDON$ROOTMOUNTEDON" ]; then
 fi
 
 BOOT_UUID_NEW=`ls -l /dev/disk/by-uuid/|grep "$BOOTPART$"|awk '{print $9}'`
-BOOT_UUID_OLD=`grep -w "/boot" $RECOVERYSOURCE/etc/fstab|awk '{print $1)'`
+BOOT_UUID_OLD=`grep -w "/boot" $RECOVERYSOURCE/etc/fstab|awk '{print $1}'`
 if [ "${BOOT_UUID_OLD/UUID=}" = "$BOOT_UUID_OLD" ]; then
    BOOT_UUID_OLD=""
 else
@@ -59,23 +59,23 @@ echo "BOOT_UUID_NEW:$BOOT_UUID_NEW"
 
 mount|awk '{print $3}' | grep "^$RECOVERYDEST" | sort -r | xargs -l1 umount >/dev/null 2>&1
 
-# mkdir -p $RECOVERYDEST
+mkdir -p $RECOVERYDEST
 vgscan
 vgchange -a y $ROOTVG
 
 
-grep -v "^#" $RECOVERYSOURCE/etc/fstab | egrep -e "^/dev/mapper/$ROOTVG\-" -e "^/dev/$ROOTVG" | grep -wv "swap" | awk '{print $2}' | sort | while read fsdevice mp x
+grep -v "^#" $RECOVERYSOURCE/etc/fstab | egrep -e "^/dev/mapper/$ROOTVG\-" -e "^/dev/$ROOTVG" | grep -wv "swap" | sort | while read fsdevice mp x
 do
    echo "mount $fsdevice $RECOVERYDEST/$mp"
-   # mkdir -p $RECOVERYDEST/$mp
-   # mount $fsdevice $RECOVERYDEST/$mp
+   mkdir -p $RECOVERYDEST/$mp
+   mount $fsdevice $RECOVERYDEST/$mp
 done
 
 echo "mount /dev/$BOOTPART $RECOVERYDEST/boot"
-# mount /dev/$BOOTPART $RECOVERYDEST/boot
+mount /dev/$BOOTPART $RECOVERYDEST/boot
 
 echo "rsync -a --delete $RECOVERYSOURCE/ $RECOVERYDEST/"
-# rsync -a --delete $RECOVERYSOURCE/ $RECOVERYDEST/
+rsync -a --delete $RECOVERYSOURCE/ $RECOVERYDEST/
 
 if [ "$BOOT_UUID_NEW" != "$BOOT_UUID_OLD" -a "$BOOT_UUID_OLD" != "" ]; then
    sed -i "s/$BOOT_UUID_OLD/$BOOT_UUID_NEW/g" $RECOVERYDEST/boot/grub2/grub.cfg
@@ -83,5 +83,5 @@ if [ "$BOOT_UUID_NEW" != "$BOOT_UUID_OLD" -a "$BOOT_UUID_OLD" != "" ]; then
 fi
 
 echo "/sbin/grub2-install /dev/$BOOTDEVICE --boot-directory $RECOVERYDEST/boot"
-# /sbin/grub2-install /dev/$BOOTDEVICE --boot-directory $RECOVERYDEST/boot
+/sbin/grub2-install /dev/$BOOTDEVICE --boot-directory $RECOVERYDEST/boot
 
