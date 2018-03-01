@@ -4,7 +4,7 @@
 #
 # T.McGinnis 2/2018
 #
-# version 0.1
+# version 0.2
 #
 RECOVERYSOURCE=/mnt/bootrecovery/root
 RECOVERYDEVICE="sda"
@@ -27,5 +27,5 @@ do
    rsync -a --one-file-system --delete $mp/ $RECOVERYSOURCE$mp/
 done
 
-echo "rsync -a --one-file-system --delete /boot $RECOVERYSOURCE/boot/"
-rsync -a --one-file-system --delete /boot $RECOVERYSOURCE/boot/
+echo "rsync -a --one-file-system --delete /boot/ $RECOVERYSOURCE/boot/"
+rsync -a --one-file-system --delete /boot/ $RECOVERYSOURCE/boot/
