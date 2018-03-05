@@ -17,6 +17,11 @@ if [ "$1" = "-u" ]; then
    exit
 fi
 
+if [ ! -f $RECOVERYSOURCE/etc/fstab ]; then
+   echo "ERROR: Cannot locate recovery source at \"$RECOVERYSOURCE\"."
+   exit 1
+fi
+
 ROOTLV=`grep -w "/" $RECOVERYSOURCE/etc/fstab|awk '{print $1}'`
 echo "ROOTLV:$ROOTLV"
 if [ "${ROOTLV/\/dev\/mapper\/}" != "$ROOTLV" ]; then
@@ -43,7 +48,7 @@ if [ "$BOOTMOUNTEDON$ROOTMOUNTEDON" ]; then
    echo ""
    read -p "Do you want to recover these filesystems anyhow? (y/n):" ans
    if [ "$ans" != "y" ]; then
-      exit 1
+      exit 2
    fi
 fi
 
