@@ -4,7 +4,7 @@
 #
 # T.McGinnis 2/2018
 #
-# version 0.1
+# version 0.2
 #
 RECOVERYSOURCE=/mnt/bootrecovery/root
 RECOVERYDEST=/mnt/sysimage
@@ -17,7 +17,7 @@ if [ "$1" = "-u" ]; then
    exit
 fi
 
-ROOTLV=`grep -w "/" /etc/fstab|awk '{print $1}'`
+ROOTLV=`grep -w "/" $RECOVERYSOURCE/etc/fstab|awk '{print $1}'`
 echo "ROOTLV:$ROOTLV"
 if [ "${ROOTLV/\/dev\/mapper\/}" != "$ROOTLV" ]; then
    ROOTVG="${ROOTLV/\/dev\/mapper\/}"
