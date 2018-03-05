@@ -4,7 +4,7 @@
 #
 # T.McGinnis 2/2018
 #
-# version 0.2
+# version 0.3
 #
 RECOVERYSOURCE=/mnt/bootrecovery/root
 RECOVERYDEST=/mnt/sysimage
@@ -79,8 +79,8 @@ done
 echo "mount /dev/$BOOTPART $RECOVERYDEST/boot"
 mount /dev/$BOOTPART $RECOVERYDEST/boot
 
-echo "rsync -a --delete $RECOVERYSOURCE/ $RECOVERYDEST/"
-rsync -a --delete $RECOVERYSOURCE/ $RECOVERYDEST/
+echo "rsync -a --sparse --delete $RECOVERYSOURCE/ $RECOVERYDEST/"
+rsync -a --sparse --delete $RECOVERYSOURCE/ $RECOVERYDEST/
 
 if [ "$BOOT_UUID_NEW" != "$BOOT_UUID_OLD" -a "$BOOT_UUID_OLD" != "" ]; then
    sed -i "s/$BOOT_UUID_OLD/$BOOT_UUID_NEW/g" $RECOVERYDEST/boot/grub2/grub.cfg

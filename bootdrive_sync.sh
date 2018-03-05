@@ -4,7 +4,7 @@
 #
 # T.McGinnis 2/2018
 #
-# version 0.2
+# version 0.3
 #
 RECOVERYSOURCE=/mnt/bootrecovery/root
 RECOVERYDEVICE="sda"
@@ -23,9 +23,9 @@ echo "Root Volmume Group: $ROOTVG"
 
 grep -v "^#" /etc/fstab | egrep -e "^/dev/mapper/$ROOTVG\-" -e "^/dev/$ROOTVG" | grep -wv "swap" | awk '{print $2}' | sort | while read mp
 do
-   echo "rsync -a --one-file-system --delete $mp/ $RECOVERYSOURCE$mp/"
-   rsync -a --one-file-system --delete $mp/ $RECOVERYSOURCE$mp/
+   echo "rsync -a --one-file-system --sparse --delete $mp/ $RECOVERYSOURCE$mp/"
+   rsync -a --one-file-system --sparse --delete $mp/ $RECOVERYSOURCE$mp/
 done
 
-echo "rsync -a --one-file-system --delete /boot/ $RECOVERYSOURCE/boot/"
-rsync -a --one-file-system --delete /boot/ $RECOVERYSOURCE/boot/
+echo "rsync -a --one-file-system --sparse --delete /boot/ $RECOVERYSOURCE/boot/"
+rsync -a --one-file-system --sparse --delete /boot/ $RECOVERYSOURCE/boot/
